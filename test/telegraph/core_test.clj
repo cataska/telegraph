@@ -2,6 +2,7 @@
   (:require [clojure.test :refer :all]
             [telegraph.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest create-account-test
+  (testing "Create account"
+    (let [result (:ok (create-account "Sandbox" "Anonymous"))]
+      (is (= result true)))))
