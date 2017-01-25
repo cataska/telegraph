@@ -10,6 +10,6 @@
 (deftest test-edit-account-info-result-should-be-true
   (testing "Edit account info result should be true"
     (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
-          result (:ok (edit-account-info token {:shot-name "Sandbox"
+          result (:ok (edit-account-info token {:short-name "Sandbox"
                                                 :author-name "Anonymous"}))]
       (is (= result true)))))
