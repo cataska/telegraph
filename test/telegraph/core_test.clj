@@ -2,7 +2,14 @@
   (:require [clojure.test :refer :all]
             [telegraph.core :refer :all]))
 
-(deftest create-account-test
-  (testing "Create account"
+(deftest test-create-account-result-should-be-true
+  (testing "Create an account result should be true"
     (let [result (:ok (create-account "Sandbox" "Anonymous"))]
+      (is (= result true)))))
+
+(deftest test-edit-account-info-result-should-be-true
+  (testing "Edit account info result should be true"
+    (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
+          result (:ok (edit-account-info token {:shot-name "Sandbox"
+                                                :author-name "Anonymous"}))]
       (is (= result true)))))
