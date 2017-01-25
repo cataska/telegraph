@@ -15,7 +15,7 @@
       (is (= result true)))))
 
 (deftest test-revoke-access-token-result-should-be-true
-  (testing "Revoke access toke result should be true"
+  (testing "Revoke access token result should be true"
     (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
           result (:ok (revoke-access-token token))]
       (is (= result true)))))

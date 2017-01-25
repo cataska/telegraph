@@ -43,7 +43,7 @@
       (parse-string true))))
 
 (defn revoke-access-token
-  "Revoke access toke and generate a new one"
+  "Revoke access token and generate a new one"
   [token]
   (let [endpoint (str api-url "/revokeAccessToken")]
     (-> (http/get endpoint
