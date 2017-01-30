@@ -27,3 +27,8 @@
           nodes (html-to-nodes "<p>Hello world!</p>")
           result (create-page token "Sample Page" nodes {:author-name "Anonymous"})]
       (is (= (:ok result) true)))))
+
+(deftest test-get-page-result-should-be-true
+  (testing "Get a page result should be true"
+    (let [result (get-page "Sample-Page-12-15" true)]
+      (is (= (:ok result) true)))))
