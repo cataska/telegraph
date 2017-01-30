@@ -2,11 +2,11 @@
   (:require [pl.danieljanus.tagsoup :as tag]))
 
 (def ALLOWED-TAGS
-  {:a :aside :b :blockquote :br
+  [:a :aside :b :blockquote :br
    :code :em :figcaption :figure :h3
    :h4 :hr :i :iframe :img
    :li :ol :p :pre :s
-   :strong :u :ul :video})
+   :strong :u :ul :video])
 
 (defn- parsed-html [html]
   (tag/parse-string html))
@@ -25,9 +25,11 @@
 
 (defn- to-node
   [[tag attrs children]]
-  (if (vector? children)
-    (assoc-attrs {:tag (name tag) :children (conj [] (to-node children))} attrs)
-    (assoc-attrs {:tag (name tag) :children (conj [] children)} attrs)))
+  (if (some (conj #{} tag) ALLOWED-TAGS)
+    (if (vector? children)
+     (assoc-attrs {:tag (name tag) :children (conj [] (to-node children))} attrs)
+     (assoc-attrs {:tag (name tag) :children (conj [] children)} attrs))
+    (throw (UnsupportedOperationException.))))
 
 (defn html-to-nodes
   [html]
