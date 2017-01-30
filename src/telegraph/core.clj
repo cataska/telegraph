@@ -21,12 +21,11 @@
    (create-account short-name author-name nil))
   ([short-name author-name, author-url]
    (let [endpoint (str api-url "/createAccount")]
-     (->
-       (http/get endpoint
-         {:query-params (filter-nil-val {:short_name short-name
-                                         :author_name author-name
-                                         :author_url author-url})})
-       retrieve-body-with-keyword))))
+     (-> (http/get endpoint
+                   {:query-params (filter-nil-val {:short_name short-name
+                                                   :author_name author-name
+                                                   :author_url author-url})})
+         retrieve-body-with-keyword))))
 
 (defn edit-account-info
   "Update information about a Telegraph account"
@@ -66,9 +65,9 @@
   [path return-content]
   (let [endpoint (str api-url "/getPage/" path)]
     (if (nil? return-content)
-      (-> (http/get endpoint))
-      (-> (http/get endpoint
-                    {:query-params {:return_content return-content}})))))
+      (http/get endpoint)
+      (http/get endpoint
+                {:query-params {:return_content return-content}}))))
 
 (defn get-page
   "Get a Telegraph page"
