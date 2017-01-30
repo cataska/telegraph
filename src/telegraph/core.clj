@@ -61,18 +61,18 @@
                                   :return_content return-content}})
         retrieve-body-with-keyword)))
 
-(defn- get-page*
+(defn get-page*
   [path return-content]
   (let [endpoint (str api-url "/getPage/" path)]
-    (if (nil? return-content)
-      (http/get endpoint)
-      (http/get endpoint
-                {:query-params {:return_content return-content}}))))
+    (http/get
+      endpoint
+      (when-not (nil? return-content)
+        {:query-params {:return_content return-content}}))))
 
 (defn get-page
   "Get a Telegraph page"
   ([path]
-    (get-page* path nil))
+    (get-page path nil))
   ([path return-content]
    (-> (get-page* path return-content)
        retrieve-body-with-keyword)))

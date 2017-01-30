@@ -28,7 +28,15 @@
           result (create-page token "Sample Page" nodes {:author-name "Anonymous"})]
       (is (= (:ok result) true)))))
 
-(deftest test-get-page-result-should-be-true
-  (testing "Get a page result should be true"
+(deftest test-get-page-result-should-be-true-and-has-return-content
+  (testing "Get a page result should be true and has return content"
     (let [result (get-page "Sample-Page-12-15" true)]
-      (is (= (:ok result) true)))))
+      (is (and (= (:ok result) true)
+               (not (nil? (get-in result [:result :content]))))))))
+
+(deftest test-get-page-result-should-be-true-and-no-return-content
+  (testing "Get a page result should be true and no return content"
+    (let [result (get-page "Sample-Page-12-15")
+          ret (get-in result [:result :content])]
+      (is (and (= (:ok result) true)
+               (nil? (get-in result [:result :content])))))))
