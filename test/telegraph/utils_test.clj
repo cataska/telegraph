@@ -15,5 +15,5 @@
           [{:tag "p" :children ["Hello world!"]}
            {:tag "p" :children [{:tag "p"
                                  :children [{:tag "a"
-                                             :children ["Test link"]
-                                             :attrs {:href "https://telegra.ph/"}}]}]}]))))
+                                             :attrs {:href "https://telegra.ph/"}
+                                             :children ["Test link"]}]}]}]))))
