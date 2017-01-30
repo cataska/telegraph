@@ -4,7 +4,7 @@
 
 (def api-url "https://api.telegra.ph")
 
-(defn filter-nil-val [m]
+(defn- filter-nil-val [m]
   (into {} (filter (comp some? val) m)))
 
 (defn- retrieve-body-with-keyword
@@ -26,14 +26,7 @@
          {:query-params (filter-nil-val {:short_name short-name
                                          :author_name author-name
                                          :author_url author-url})})
-       (:body)
-       (parse-string true)))))
-
-(defn str-or-nil
-  [s]
-  (if (nil? s)
-    "nil"
-    s))
+       retrieve-body-with-keyword))))
 
 (defn edit-account-info
   "Update information about a Telegraph account"
@@ -45,8 +38,7 @@
                                         :short_name short-name
                                         :author_name author-name
                                         :author_url author-url})})
-      (:body)
-      (parse-string true))))
+      retrieve-body-with-keyword)))
 
 (defn revoke-access-token
   "Revoke access token and generate a new one"
@@ -54,8 +46,7 @@
   (let [endpoint (str api-url "/revokeAccessToken")]
     (-> (http/get endpoint
                   {:query-params {:access_token token}})
-        (:body)
-        (parse-string true))))
+        retrieve-body-with-keyword)))
 
 (defn create-page
   "Create a new Telegraph page"
@@ -69,8 +60,7 @@
                                   :author_url author-url
                                   :content content
                                   :return_content return-content}})
-        (:body)
-        (parse-string true))))
+        retrieve-body-with-keyword)))
 
 (defn- get-page'
   [path return-content]
