@@ -6,6 +6,4 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [clj-http "3.4.1"]
                  [clj-tagsoup "0.3.0"]
-                 [cheshire "5.6.3"]
-                 [hickory "0.7.0"]
-                 [enlive "1.1.6"]])
+                 [cheshire "5.6.3"]])
