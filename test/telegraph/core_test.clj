@@ -5,8 +5,8 @@
 
 (deftest test-create-account-result-should-be-true
   (testing "Create an account result should be true"
-    (let [result (:ok (create-account "Sandbox" "Anonymous"))]
-      (is (= result true)))))
+    (let [result (create-account "Sandbox" "Anonymous")]
+      (is (= (:ok result) true)))))
 
 (deftest test-edit-account-info-result-should-be-true
   (testing "Edit account info result should be true"
