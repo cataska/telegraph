@@ -50,3 +50,18 @@
                   {:query-params {:access_token token}})
         (:body)
         (parse-string true))))
+
+(defn create-page
+  "Create a new Telegraph page"
+  [token title content {:keys [author-name author-url return-content]}]
+  (let [endpoint (str api-url "/createPage")
+        content (encode content)]
+    (-> (http/get endpoint
+                  {:query-params {:access_token token
+                                  :title title
+                                  :author_name author-name
+                                  :author_url author-url
+                                  :content content
+                                  :return_content return-content}})
+        (:body)
+        (parse-string true))))
