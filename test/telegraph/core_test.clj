@@ -36,7 +36,6 @@
 
 (deftest test-get-page-result-should-be-true-and-no-return-content
   (testing "Get a page result should be true and no return content"
-    (let [result (get-page "Sample-Page-12-15")
-          ret (get-in result [:result :content])]
+    (let [result (get-page "Sample-Page-12-15")]
       (is (and (= (:ok result) true)
                (nil? (get-in result [:result :content])))))))

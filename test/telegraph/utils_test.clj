@@ -8,8 +8,8 @@
       (is (= (html-to-nodes html)
              [{:tag "p" :children ["Hello world!"]}])))))
 
-(deftest test-two-paragraph-one-achor-html
-  (testing
+(deftest test-two-paragraph-one-achor-html-to-nodes
+  (testing "Test two paragraph and on anchor html to nodes"
     (let [html "<p>Hello, world!</p><p><a href=\"https://telegra.ph/\">Test link</a></p>"]
       (is (= (html-to-nodes html))
           [{:tag "p" :children ["Hello world!"]}
