@@ -2,7 +2,7 @@
   (:require [clj-http.client :as http]
             [cheshire.core :refer :all]))
 
-(def api-url "https://api.telegra.ph")
+(def ^:private api-url "https://api.telegra.ph")
 
 (defn- filter-nil-val [m]
   (into {} (filter (comp some? val) m)))
@@ -61,7 +61,7 @@
                                   :return_content return-content}})
         retrieve-body-with-keyword)))
 
-(defn get-page*
+(defn- get-page*
   [path return-content]
   (let [endpoint (str api-url "/getPage/" path)]
     (http/get
