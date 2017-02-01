@@ -32,10 +32,25 @@
   (testing "Get a page result should be true and has return content"
     (let [result (get-page "Sample-Page-12-15" true)]
       (is (and (= (:ok result) true)
-               (not (nil? (get-in result [:result :content]))))))))
+               (some? (get-in result [:result :content])))))))
 
 (deftest test-get-page-result-should-be-true-and-no-return-content
   (testing "Get a page result should be true and no return content"
     (let [result (get-page "Sample-Page-12-15")]
       (is (and (= (:ok result) true)
                (nil? (get-in result [:result :content])))))))
+
+(deftest test-edit-page-result-should-be-true-and-has-return-content
+  (testing "Edit a page result should be true and has return content"
+    (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
+          nodes (html-to-nodes "<p>Hello world!</p>")
+          title "Sample Page"
+          page-result (create-page token title nodes {:author-name "Anonymous"})
+          path (get-in page-result [:result :path])
+          new-nodes (html-to-nodes "<p>Hello,+world!</p>")
+          result (edit-page token path title new-nodes {:return-content true})]
+      (is (and (= (:ok result) true)
+               (some? (get-in result [:result :content])))))))
+
+
+

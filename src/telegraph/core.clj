@@ -49,9 +49,9 @@
 
 (defn create-page
   "Create a new Telegraph page"
-  [token title content {:keys [author-name author-url return-content]}]
+  [token title nodes {:keys [author-name author-url return-content]}]
   (let [endpoint (str api-url "/createPage")
-        content (encode content)]
+        content (encode nodes)]
     (-> (http/get endpoint
                   {:query-params {:access_token token
                                   :title title
@@ -72,7 +72,21 @@
 (defn get-page
   "Get a Telegraph page"
   ([path]
-    (get-page path nil))
+   (get-page path nil))
   ([path return-content]
    (-> (get-page* path return-content)
        retrieve-body-with-keyword)))
+
+(defn edit-page
+  "Edit and existing Telegraph page"
+  [token path title nodes {:keys [author-name author-url return-content]}]
+  (let [endpoint (str api-url "/editPage/" path)
+        content (encode nodes)]
+    (-> (http/get endpoint
+                  {:query-params {:access_token   token
+                                  :title          title
+                                  :content        content
+                                  :author_name    author-name
+                                  :author_url     author-url
+                                  :return_content return-content}})
+        retrieve-body-with-keyword)))
