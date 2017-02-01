@@ -1,6 +1,7 @@
 (ns telegraph.core
   (:require [clj-http.client :as http]
-            [cheshire.core :refer :all]))
+            [cheshire.core :refer :all]
+            [clojure.string :as str]))
 
 (def ^:private api-url "https://api.telegra.ph")
 
@@ -22,9 +23,9 @@
   ([short-name author-name, author-url]
    (let [endpoint (str api-url "/createAccount")]
      (-> (http/get endpoint
-                   {:query-params (filter-nil-val {:short_name short-name
+                   {:query-params (filter-nil-val {:short_name  short-name
                                                    :author_name author-name
-                                                   :author_url author-url})})
+                                                   :author_url  author-url})})
          retrieve-body-with-keyword))))
 
 (defn edit-account-info
@@ -33,10 +34,10 @@
   (let [endpoint (str api-url "/editAccountInfo")]
     (->
       (http/get endpoint
-        {:query-params (filter-nil-val {:access_token token
-                                        :short_name short-name
-                                        :author_name author-name
-                                        :author_url author-url})})
+                {:query-params (filter-nil-val {:access_token token
+                                                :short_name   short-name
+                                                :author_name  author-name
+                                                :author_url   author-url})})
       retrieve-body-with-keyword)))
 
 (defn revoke-access-token
@@ -53,11 +54,11 @@
   (let [endpoint (str api-url "/createPage")
         content (encode nodes)]
     (-> (http/get endpoint
-                  {:query-params {:access_token token
-                                  :title title
-                                  :author_name author-name
-                                  :author_url author-url
-                                  :content content
+                  {:query-params {:access_token   token
+                                  :title          title
+                                  :author_name    author-name
+                                  :author_url     author-url
+                                  :content        content
                                   :return_content return-content}})
         retrieve-body-with-keyword)))
 
@@ -90,3 +91,27 @@
                                   :author_url     author-url
                                   :return_content return-content}})
         retrieve-body-with-keyword)))
+
+(defn- key->name [k]
+  (str/lower-case (str/replace (name k) "-" "_")))
+
+(defn- keys->names
+  [keys]
+  (loop [m keys
+         result []]
+    (if (empty? m)
+      result
+      (recur (rest m) (conj result (key->name (first m)))))))
+
+(defn- get-account-info* [token fields]
+  (let [endpoint (str api-url "/getAccountInfo")]
+    (-> (http/get endpoint {:query-params {:access_token token
+                                           :fields       (encode fields)}})
+        retrieve-body-with-keyword)))
+
+(defn get-account-info [token & field-keys]
+  (loop [keys field-keys
+         fields []]
+    (if (empty? keys)
+      (get-account-info* token (keys->names fields))
+      (recur (rest keys) (conj fields (first keys))))))

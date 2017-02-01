@@ -52,5 +52,12 @@
       (is (and (= (:ok result) true)
                (some? (get-in result [:result :content])))))))
 
-
-
+(deftest test-get-account-info-result-should-be-true-and-name-should-be-same
+  (testing "Get account info result should be true and name should be same"
+    (let [short-name "Sandbox"
+          author-name "Anonymous"
+          token (get-in (create-account short-name author-name) [:result :access_token])
+          result (get-account-info token :short-name :author-name)]
+      (is (and (= (:ok result) true)
+               (= (get-in result [:result :short_name]) short-name)
+               (= (get-in result [:result :author_name]) author-name))))))
