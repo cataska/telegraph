@@ -8,8 +8,14 @@
    :li :ol :p :pre :s
    :strong :u :ul :video])
 
+(defn- key-in? [coll key]
+  (some #(= % key) (flatten coll)))
+
 (defn- parsed-html [html]
-  (tag/parse-string html))
+  (let [parsed (tag/parse-string html)]
+    (if (key-in? parsed :body)
+      parsed
+      [:html {} [:body {} parsed]])))
 
 (defn- parsed-body [html]
   (first (tag/children (parsed-html html))))

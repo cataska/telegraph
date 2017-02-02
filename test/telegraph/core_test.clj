@@ -62,7 +62,6 @@
                (= (get-in result [:result :short_name]) short-name)
                (= (get-in result [:result :author_name]) author-name))))))
 
-
 (deftest test-get-page-list-result-should-be-true
   (testing "Get a list of pages result should be true"
     (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])

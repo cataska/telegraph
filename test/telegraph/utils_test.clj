@@ -17,3 +17,8 @@
                                  :children [{:tag "a"
                                              :attrs {:href "https://telegra.ph/"}
                                              :children ["Test link"]}]}]}]))))
+
+(deftest test-invalid-tag-should-throw-exception
+  (testing "Test invalid tag should throw exception"
+    (let [html "<script src=\"localhost\"></script>"]
+      (is (thrown? UnsupportedOperationException (html-to-nodes html))))))
