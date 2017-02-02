@@ -32,13 +32,12 @@
   "Update information about a Telegraph account"
   [token {:keys [short-name author-name author-url]}]
   (let [endpoint (str api-url "/editAccountInfo")]
-    (->
-      (http/get endpoint
-                {:query-params (filter-nil-val {:access_token token
-                                                :short_name   short-name
-                                                :author_name  author-name
-                                                :author_url   author-url})})
-      retrieve-body-with-keyword)))
+    (-> (http/get endpoint
+                  {:query-params (filter-nil-val {:access_token token
+                                                  :short_name   short-name
+                                                  :author_name  author-name
+                                                  :author_url   author-url})})
+        retrieve-body-with-keyword)))
 
 (defn revoke-access-token
   "Revoke access token and generate a new one"
@@ -116,16 +115,18 @@
       (get-account-info* token (keys->names fields))
       (recur (rest keys) (conj fields (first keys))))))
 
+(defn- filter-nil-not-number [m]
+  (let [new-map (filter-nil-val m)]
+    (into {} (filter (fn [[k v]] (number? v)) new-map))))
+
 (defn get-page-list
   "Get a list of pages belongs to Telegraph account"
   ([token]
    (get-page-list token nil nil))
   ([token offset limit]
-   (let [query-map {:access_token token}
-         endpoint (str api-url "/getPageList")]
-     (when (and (some? offset) (number? offset))
-       (assoc query-map :offset offset))
-     (when (and (some? offset) (number? offset))
-       (assoc query-map :limit limit))
-     (-> (http/get endpoint {:query-params query-map})
+   (let [endpoint (str api-url "/getPageList")]
+     (-> (http/get endpoint {:query-params (merge {:access_token token}
+                                                  (filter-nil-not-number
+                                                    {:offset offset
+                                                     :limit  limit}))})
          retrieve-body-with-keyword))))

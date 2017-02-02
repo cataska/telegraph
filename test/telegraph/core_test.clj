@@ -68,3 +68,9 @@
     (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
           result (get-page-list token)]
       (is (= (:ok result) true)))))
+
+(deftest test-get-page-list-with-limit-3-result-should-be-true
+  (testing "Get a list of pages with limit 3 result should be true"
+    (let [token (get-in (create-account "Sandbox" "Anonymous") [:result :access_token])
+          result (get-page-list token nil 3)]
+      (is (= (:ok result) true)))))
