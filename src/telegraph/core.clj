@@ -115,3 +115,17 @@
     (if (empty? keys)
       (get-account-info* token (keys->names fields))
       (recur (rest keys) (conj fields (first keys))))))
+
+(defn get-page-list
+  "Get a list of pages belongs to Telegraph account"
+  ([token]
+   (get-page-list token nil nil))
+  ([token offset limit]
+   (let [query-map {:access_token token}
+         endpoint (str api-url "/getPageList")]
+     (when (and (some? offset) (number? offset))
+       (assoc query-map :offset offset))
+     (when (and (some? offset) (number? offset))
+       (assoc query-map :limit limit))
+     (-> (http/get endpoint {:query-params query-map})
+         retrieve-body-with-keyword))))
