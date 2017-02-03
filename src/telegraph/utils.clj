@@ -45,14 +45,6 @@
         (assoc-attrs attrs))
     (throw (UnsupportedOperationException.))))
 
-;(defn- to-node
-;  [[tag attrs children]]
-;  (if (some (conj #{} tag) ALLOWED-TAGS)
-;    (if (vector? children)
-;     (assoc-attrs {:tag (name tag) :children (conj [] (to-node children))} attrs)
-;     (assoc-attrs {:tag (name tag) :children (conj [] children)} attrs))
-;    (throw (UnsupportedOperationException.))))
-
 (defn html-to-nodes
   [html]
   (let [html-elements (parsed-body-children html)]
