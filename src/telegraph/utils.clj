@@ -23,6 +23,14 @@
 (defn- parsed-body-children [html]
   (tag/children (parsed-body html)))
 
+(declare to-node)
+
+(defn- assoc-children [m children]
+  (cond
+    (vector? children) (assoc m :children (conj [] (to-node children)))
+    (nil? children) m
+    :else (assoc m :children (conj [] children))))
+
 (defn- assoc-attrs [m attrs]
   (if (or (contains? attrs :src)
           (contains? attrs :href))
@@ -32,10 +40,18 @@
 (defn- to-node
   [[tag attrs children]]
   (if (some (conj #{} tag) ALLOWED-TAGS)
-    (if (vector? children)
-     (assoc-attrs {:tag (name tag) :children (conj [] (to-node children))} attrs)
-     (assoc-attrs {:tag (name tag) :children (conj [] children)} attrs))
+    (-> {:tag (name tag)}
+        (assoc-children children)
+        (assoc-attrs attrs))
     (throw (UnsupportedOperationException.))))
+
+;(defn- to-node
+;  [[tag attrs children]]
+;  (if (some (conj #{} tag) ALLOWED-TAGS)
+;    (if (vector? children)
+;     (assoc-attrs {:tag (name tag) :children (conj [] (to-node children))} attrs)
+;     (assoc-attrs {:tag (name tag) :children (conj [] children)} attrs))
+;    (throw (UnsupportedOperationException.))))
 
 (defn html-to-nodes
   [html]
