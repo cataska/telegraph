@@ -32,10 +32,7 @@
     :else (assoc m :children (conj [] children))))
 
 (defn- assoc-attrs [m attrs]
-  (if (or (contains? attrs :src)
-          (contains? attrs :href))
-    (assoc m :attrs (dissoc attrs :shape))
-    m))
+  (assoc m :attrs (select-keys attrs [:src :href])))
 
 (defn- to-node
   [[tag attrs children]]
